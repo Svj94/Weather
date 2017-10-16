@@ -3,10 +3,10 @@ var dataCacheName = 'weatherData-v1';
 
 var cacheName = 'weatherPWA-step-6-1';
 var filesToCache = [
-  '/',
-  '/index.html',
-  '/scripts/app.js',
-  '/styles/inline.css',
+  '/Weather/',
+  '/Weather/index.html',
+  '/Weather/scripts/app.js',
+  '/Weather/styles/inline.css',
   '/Weather/images/clear.png',
   '/Weather/images/cloudy-scattered-showers.png',
   '/Weather/images/cloudy.png',
