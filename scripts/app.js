@@ -39,7 +39,6 @@
       todoDB.indexedDB = {};
       todoDB.indexedDB.db = null;
 	
-      
       todoDB.indexedDB.onerror = function(e) {
         console.log(e);
       };
@@ -141,7 +140,7 @@
         li.appendChild(t);
         todos.appendChild(li)
         // And lets create the new il item with its markup
-        $("#todoItems").trigger('create'); 
+      //  $("#todoItems").trigger('create'); 
       }
       // Add an item only if we have more then zero letters
       function addTodo() {
