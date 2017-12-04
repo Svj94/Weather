@@ -38,16 +38,6 @@
       }
       todoDB.indexedDB = {};
       todoDB.indexedDB.db = null;
-      $(document).bind('pageinit', function() {
-        console.log("-- lets start the party --");
-        todoDB.indexedDB.open();
-        $("#addItem").click(function() {
-          addTodo();
-        });
-      });
-      todoDB.indexedDB.onerror = function(e) {
-        console.log(e);
-      };
       todoDB.indexedDB.open = function() {
         var request = indexedDB.open(dbName, dbVersion);
         request.onsuccess = function(e) {
