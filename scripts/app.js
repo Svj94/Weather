@@ -38,6 +38,9 @@
       }
       todoDB.indexedDB = {};
       todoDB.indexedDB.db = null;
+       todoDB.indexedDB.onerror = function(e) {
+        console.log(e);
+       };
       todoDB.indexedDB.open = function() {
         var request = indexedDB.open(dbName, dbVersion);
         request.onsuccess = function(e) {
