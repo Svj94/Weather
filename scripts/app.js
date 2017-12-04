@@ -56,6 +56,32 @@
           todoDB.indexedDB.getAllTodoItems();
         }	
 	
+    request.onupgradeneeded = function(e) {
+          todoDB.indexedDB.db = e.target.result;
+          var db = todoDB.indexedDB.db;
+          console.log ("Going to upgrade our DB from version: "+ e.oldVersion + " to " + e.newVersion);
+            try {
+              if (db.objectStoreNames && db.objectStoreNames.contains("todo")) {
+                db.deleteObjectStore("todo");
+              }
+            }
+            catch (err) {
+              console.log("got err in objectStoreNames:" + err);
+            }
+            var store = db.createObjectStore("todo",
+                {keyPath: "timeStamp"});
+            console.log("-- onupgradeneeded store:"+ JSON.stringify(store));
+          }
+       
+        request.onfailure = function(e) {
+          console.error("could not open our DB! Err:"+e);  
+        }
+        
+        request.onerror = function(e) {
+          console.error("Well... How should I put it? We have some issues with our DB! Err:"+e);
+        }
+      };
+	
 	
 	
 	
