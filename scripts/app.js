@@ -115,12 +115,41 @@
   });
 
 
+	
+
   /*****************************************************************************
    *
    * Methods to update/refresh the UI
    *
    ****************************************************************************/
 
+// for idb 
+	
+app.showAll=function() {
+	var request = window.indexedDB.open(dbName);
+        request.onsuccess = function(event) {
+          // Enumerate the entire object store.
+          var db = todoDB.indexedDB.db;
+          var trans = db.transaction("todo", "readonly");
+          var request = trans.objectStore("todo").openCursor();
+          var ul = document.createElement("ul");
+          request.onsuccess = function(event) {
+            var cursor = request.result || event.result;
+            // If cursor is null then we've completed the enumeration.
+            if (!cursor) {
+              document.getElementById("ourList").appendChild(ul);
+              return;
+            }
+            var li = document.createElement("li");
+            li.textContent = "key: " + cursor.key + " => Todo text: " + cursor.value.text;
+            ul.appendChild(li);
+            cursor.continue();
+          }
+        }                    
+      }
+	
+	
+	
   // Toggles the visibility of the add new city dialog.
   app.toggleAddDialog = function(visible) {
     if (visible) {
@@ -214,6 +243,11 @@
    * request goes through, then the card gets updated a second time with the
    * freshest data.
    */
+	
+ 
+	
+	
+	
   app.getForecast = function(key, label) {
     var statement = 'select * from weather.forecast where woeid=' + key;
     var url = 'https://query.yahooapis.com/v1/public/yql?format=json&q=' +
@@ -272,6 +306,9 @@
     var selectedCities = JSON.stringify(app.selectedCities);
     localStorage.selectedCities = selectedCities;
   };
+	
+	
+
 
   app.getIconClass = function(weatherCode) {
     // Weather codes: https://developer.yahoo.com/weather/documentation.html#codes
