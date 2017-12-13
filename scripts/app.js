@@ -27,7 +27,7 @@
     daysOfWeek: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   };
 
-   var dbName = "jqm-todo";
+   var dbName = "jqm-todo"
       var dbVersion = 4;
       var todoDB = {};
       var indexedDB = window.indexedDB || window.webkitIndexedDB ||
@@ -306,8 +306,6 @@ app.showAll=function() {
     var selectedCities = JSON.stringify(app.selectedCities);
     localStorage.selectedCities = selectedCities;
   };
-	
-	
 
 
   app.getIconClass = function(weatherCode) {
