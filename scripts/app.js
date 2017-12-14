@@ -34,7 +34,7 @@
    
      window.onload = function() {
      // TODO: App Code goes here.
-     };
+     
 
 	// Display the todo items.
 	todoDB.open(refreshTodos);
@@ -99,7 +99,7 @@
 
   });
 }
-
+};
    /*****************************************************************************
    *
    * Event listeners for UI elements
