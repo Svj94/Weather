@@ -27,58 +27,80 @@
     daysOfWeek: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   };
 
-   var dbName = "jqm-todo";
-      var dbVersion = 4;
-      var todoDB = {};
-      var indexedDB = window.indexedDB || window.webkitIndexedDB ||
-        window.mozIndexedDB;
-      if ('webkitIndexedDB' in window) {
-        //   window.IDBTransaction = window.webkitIDBTransaction;
-        window.IDBKeyRange = window.webkitIDBKeyRange;
-      }
-      todoDB.indexedDB = {};
-      todoDB.indexedDB.db = null;
-       todoDB.indexedDB.onerror = function(e) {
-        console.log(e);
-       };
-      todoDB.indexedDB.open = function() {
-        var request = indexedDB.open(dbName, dbVersion);
-        request.onsuccess = function(e) {
-          console.log ("success our DB: " + dbName + " is open and ready for work");
-          todoDB.indexedDB.db = e.target.result;
-          todoDB.indexedDB.getAllTodoItems();
-        }	
-	
-    request.onupgradeneeded = function(e) {
-          todoDB.indexedDB.db = e.target.result;
-          var db = todoDB.indexedDB.db;
-          console.log ("Going to upgrade our DB from version: "+ e.oldVersion + " to " + e.newVersion);
-            try {
-              if (db.objectStoreNames && db.objectStoreNames.contains("todo")) {
-                db.deleteObjectStore("todo");
-              }
-            }
-            catch (err) {
-              console.log("got err in objectStoreNames:" + err);
-            }
-            var store = db.createObjectStore("todo",
-                {keyPath: "timeStamp"});
-            console.log("-- onupgradeneeded store:"+ JSON.stringify(store));
-          }
-       
-        request.onfailure = function(e) {
-          console.error("could not open our DB! Err:"+e);  
-        }
-        
-        request.onerror = function(e) {
-          console.error("Well... How should I put it? We have some issues with our DB! Err:"+e);
-        }
-      };
-	
-	
-	
-	
   /*****************************************************************************
+   *
+   For indexed db *
+   ****************************************************************************/
+   
+     window.onload = function() {
+     // TODO: App Code goes here.
+     };
+
+	// Display the todo items.
+	todoDB.open(refreshTodos);
+
+	// Get references to the form elements.
+	var newTodoForm = document.getElementById('new-todo-form');
+	var newTodoInput = document.getElementById('new-todo');
+
+	// Handle new todo item form submissions.
+	newTodoForm.onsubmit = function() {
+  // Get the todo text.
+  var text = newTodoInput.value;
+
+  // Check to make sure the text is not blank (or just spaces).
+  if (text.replace(/ /g,'') != '') {
+    // Create the todo item.
+    todoDB.createTodo(text, function(todo) {
+      refreshTodos();
+    });
+  }
+
+  // Reset the input field.
+  newTodoInput.value = '';
+
+  // Don't send the form.
+  return false;
+};
+
+// Update the list of todo items.
+function refreshTodos() {  
+  todoDB.fetchTodos(function(todos) {
+    var todoList = document.getElementById('todo-items');
+    todoList.innerHTML = '';
+
+    for(var i = 0; i < todos.length; i++) {
+      // Read the todo items backwards (most recent first).
+      var todo = todos[(todos.length - 1 - i)];
+
+      var li = document.createElement('li');
+      li.id = 'todo-' + todo.timestamp;
+      var checkbox = document.createElement('input');
+      checkbox.type = "checkbox";
+      checkbox.className = "todo-checkbox";
+      checkbox.setAttribute("data-id", todo.timestamp);
+
+      li.appendChild(checkbox);
+
+      var span = document.createElement('span');
+      span.innerHTML = todo.text;
+
+      li.appendChild(span);
+
+      todoList.appendChild(li);
+
+      // Setup an event listener for the checkbox.
+      checkbox.addEventListener('click', function(e) {
+        var id = parseInt(e.target.getAttribute('data-id'));
+
+        todoDB.deleteTodo(id, refreshTodos);
+      });
+    }
+
+  });
+}
+
+   /*****************************************************************************
    *
    * Event listeners for UI elements
    *
@@ -244,11 +266,7 @@ app.showAll=function() {
    * freshest data.
    */
 	
- 
-	
-	
-	
-  app.getForecast = function(key, label) {
+    app.getForecast = function(key, label) {
     var statement = 'select * from weather.forecast where woeid=' + key;
     var url = 'https://query.yahooapis.com/v1/public/yql?format=json&q=' +
         statement;
@@ -306,7 +324,6 @@ app.showAll=function() {
     var selectedCities = JSON.stringify(app.selectedCities);
     localStorage.selectedCities = selectedCities;
   };
-
 
   app.getIconClass = function(weatherCode) {
     // Weather codes: https://developer.yahoo.com/weather/documentation.html#codes
@@ -446,8 +463,6 @@ app.showAll=function() {
     app.saveSelectedCities();
   }
 	
-  
-  
   // TODO add service worker code here
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
