@@ -45,16 +45,16 @@
 
 	// Handle new todo item form submissions.
 	newTodoForm.onsubmit = function() {
-  // Get the todo text.
-  var text = newTodoInput.value;
+        // Get the todo text.
+        var text = newTodoInput.value;
 
-  // Check to make sure the text is not blank (or just spaces).
-  if (text.replace(/ /g,'') != '') {
-    // Create the todo item.
-    todoDB.createTodo(text, function(todo) {
+       // Check to make sure the text is not blank (or just spaces).
+      if (text.replace(/ /g,'') != '') {
+       // Create the todo item.
+      todoDB.createTodo(text, function(todo) {
       refreshTodos();
-    });
-  }
+      });
+   }
 
   // Reset the input field.
   newTodoInput.value = '';
@@ -63,8 +63,8 @@
   return false;
 };
 
-// Update the list of todo items.
-function refreshTodos() {  
+    // Update the list of todo items.
+  function refreshTodos() {  
   todoDB.fetchTodos(function(todos) {
     var todoList = document.getElementById('todo-items');
     todoList.innerHTML = '';
@@ -136,9 +136,6 @@ function refreshTodos() {
     app.toggleAddDialog(false);
   });
 
-
-	
-
   /*****************************************************************************
    *
    * Methods to update/refresh the UI
@@ -169,9 +166,7 @@ app.showAll=function() {
           }
         }                    
       }
-	
-	
-	
+
   // Toggles the visibility of the add new city dialog.
   app.toggleAddDialog = function(visible) {
     if (visible) {
@@ -249,7 +244,6 @@ app.showAll=function() {
       app.isLoading = false;
     }
   };
-
 
   /*****************************************************************************
    *
