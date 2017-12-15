@@ -44,7 +44,7 @@
 	var newTodoInput = document.getElementById('new-todo');
 
 	// Handle new todo item form submissions.
-	newTodoForm.onsubmit = function() {
+	newTodoForm.onsubmit= function() {
         // Get the todo text.
         var text = newTodoInput.value;
 
@@ -63,7 +63,7 @@
   return false;
 };
 
-    // Update the list of todo items.
+  // Update the list of todo items.
   function refreshTodos() {  
   todoDB.fetchTodos(function(todos) {
     var todoList = document.getElementById('todo-items');
@@ -89,11 +89,10 @@
 
       todoList.appendChild(li);
 
-      // Setup an event listener for the checkbox.
-      checkbox.addEventListener('click', function(e) {
-        var id = parseInt(e.target.getAttribute('data-id'));
-
-        todoDB.deleteTodo(id, refreshTodos);
+      //Setup an event listener for the checkbox.
+       checkbox.addEventListener('click', function(e) {
+       var id = parseInt(e.target.getAttribute('data-id'));
+       todoDB.deleteTodo(id, refreshTodos);
       });
     }
 
@@ -143,19 +142,18 @@
    ****************************************************************************/
 
 // for idb 
-	
-app.showAll=function() {
+	app.showAll=function() {
 	var request = window.indexedDB.open(dbName);
         request.onsuccess = function(event) {
-          // Enumerate the entire object store.
-          var db = todoDB.indexedDB.db;
-          var trans = db.transaction("todo", "readonly");
-          var request = trans.objectStore("todo").openCursor();
-          var ul = document.createElement("ul");
-          request.onsuccess = function(event) {
-            var cursor = request.result || event.result;
-            // If cursor is null then we've completed the enumeration.
-            if (!cursor) {
+        // Enumerate the entire object store.
+        var db = todoDB.indexedDB.db;
+        var trans = db.transaction("todo", "readonly");
+        var request = trans.objectStore("todo").openCursor();
+        var ul = document.createElement("ul");
+        request.onsuccess = function(event) {
+        var cursor = request.result || event.result;
+        // If cursor is null then we've completed the enumeration.
+           if (!cursor) {
               document.getElementById("ourList").appendChild(ul);
               return;
             }
