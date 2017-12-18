@@ -55,7 +55,6 @@
       refreshTodos();
       });
    }
-
   // Reset the input field.
   newTodoInput.value = '';
 
